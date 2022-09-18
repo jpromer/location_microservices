@@ -1,40 +1,40 @@
 const db = require("../models");
-const Bike = db.bike;
+const Location = db.location;
 
 exports.create = (req, res) => {
   if (!req.body.idBike) {
     res
       .status(400)
-      .send({ message: "Can't add bike, idBike field is required" });
+      .send({ message: "Can't add location, idLocation field is required" });
     return;
   }
 
-  if (!req.body.color) {
+  if (!req.body.latitud) {
     res
       .status(400)
-      .send({ message: "Can't add bike, color field is required" });
+      .send({ message: "Can't add location, latitud field is required" });
     return;
   }
-  if (!req.body.model) {
+  if (!req.body.longitud) {
     res
       .status(400)
-      .send({ message: "Can't add bike, model field is required" });
+      .send({ message: "Can't add location, longitud field is required" });
     return;
   }
 
-  const bike = new Bike({
+  const location = new Location({
     idBike: req.body.idBike,
-    color: req.body.color,
-    model: req.body.model,
+    latitud: req.body.latitud,
+    longitud: req.body.longitud,
   });
-  bike
-    .save(bike)
+  location
+    .save(location)
     .then((data) => {
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "An error occurred while storing a bike",
+        message: err.message || "An error occurred while storing a location",
       });
     });
 };
@@ -45,13 +45,13 @@ exports.findAll = (req, res) => {
     ? { idBike: { $regex: new RegExp(idBike), $options: "i" } }
     : {};
 
-  Bike.find(condicion)
+  Location.find(condicion)
     .then((data) => {
       res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "An error occurred when searching for bikes",
+        message: err.message || "An error occurred when searching for locations",
       });
     });
 };
@@ -59,17 +59,17 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const idBike = req.params.idBike;
 
-  Bike.find({ idBike: idBike })
+  Location.find({ idBike: idBike })
     .then((data) => {
       if (!data) {
         res
           .status(404)
-          .send({ message: "There is no bike with the id" + idBike });
+          .send({ message: "There is no location with the id" + idBike });
       } else res.send(data);
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error bringing the bike =" + idBike,
+        message: "Error bringing the location =" + idBike,
       });
     });
 };
@@ -77,21 +77,21 @@ exports.findOne = (req, res) => {
 exports.deleteOne = (req, res) => {
   const idBike = req.params.idBike;
 
-  Bike.deleteOne({ idBike: idBike })
+  Location.deleteOne({ idBike: idBike })
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Failed to remove bike ${idBike}. The student may not have been found.`,
+          message: `Failed to remove location ${idBike}. The student may not have been found.`,
         });
       } else {
         res.send({
-          message: "The bike was successfully removed",
+          message: "The location was successfully removed",
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Error deleting bikes",
+        message: "Error deleting locations",
       });
     });
 };
@@ -103,7 +103,7 @@ exports.update = (req, res) => {
     });
   }
 
- Bike.updateOne(
+ Location.updateOne(
     { idBike: req.params.idBike },
     { $set: req.body },
     { useFindAndModify: false }
@@ -111,14 +111,14 @@ exports.update = (req, res) => {
     .then((data) => {
       if (!data) {
         res.status(404).send({
-          message: `Failed to update bike with document number =${idBike}. Please check and perform the action again!`,
+          message: `Failed to update location with document number =${idBike}. Please check and perform the action again!`,
         });
-      } else res.send({ message: "Successfully upgraded bike" });
+      } else res.send({ message: "Successfully upgraded location" });
     })
     .catch((err) => {
       res.status(500).send({
         message:
-          "Error updating bike with id" +
+          "Error updating location with id" +
           idBike,
       });
     });
