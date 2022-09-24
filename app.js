@@ -4,6 +4,26 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const bodyParser = require("body-parser");
+const location = require("./src/controller/location.controller");
+const amqp = require("amqplib");
+var channel, connection;
+
+connectQueue(); // call connectQueue function
+async function connectQueue() {
+  try {
+    connection = await amqp.connect("amqps://rakeswqy:TQLGAcSh5D89pvC_OpxFMTScvFTfq1cA@moose.rmq.cloudamqp.com/rakeswqy");
+    channel = await connection.createChannel();
+    // connect to 'test-queue', create one if doesnot exist already
+    await channel.assertQueue("location");
+
+    channel.consume("location", (data) => {
+      location.create(JSON.parse(data.content.toString()));      
+      channel.ack(data);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 var app = express();
 

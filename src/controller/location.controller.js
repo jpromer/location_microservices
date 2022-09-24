@@ -2,20 +2,20 @@ const db = require("../models");
 const Location = db.location;
 
 exports.create = (req, res) => {
-  if (!req.body.idBike) {
+  if (!req.idBike) {
     res
       .status(400)
       .send({ message: "Can't add location, idLocation field is required" });
     return;
   }
 
-  if (!req.body.latitud) {
+  if (!req.latitud) {
     res
       .status(400)
       .send({ message: "Can't add location, latitud field is required" });
     return;
   }
-  if (!req.body.longitud) {
+  if (!req.longitud) {
     res
       .status(400)
       .send({ message: "Can't add location, longitud field is required" });
@@ -23,9 +23,9 @@ exports.create = (req, res) => {
   }
 
   const location = new Location({
-    idBike: req.body.idBike,
-    latitud: req.body.latitud,
-    longitud: req.body.longitud,
+    idBike: req.idBike,
+    latitud: req.latitud,
+    longitud: req.longitud,
   });
   location
     .save(location)
