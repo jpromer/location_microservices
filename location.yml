@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locationmicroservices-v1
+  labels:
+    app: locationmicroservices
+    version: "1.0"
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: locationmicroservices
+  template:
+    metadata:
+      labels:
+        app: locationmicroservices
+        version: "1.0"
+    spec:
+      containers:
+      - name: locationmicroservices
+        image: jpromer/microserviceslocations
+        ports:
+        - name: http-server
+          containerPort: 3002

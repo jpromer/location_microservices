@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: locationmicroservices
+  labels:
+    app: locationmicroservices
+spec:
+  ports:
+  - port: 3002
+    targetPort: http-server
+  selector:
+    app: locationmicroservices
+  type: LoadBalancer
